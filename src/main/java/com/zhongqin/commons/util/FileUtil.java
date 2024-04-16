@@ -1,20 +1,16 @@
 package com.zhongqin.commons.util;
 
-import lombok.SneakyThrows;
+import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 
 import java.io.*;
-import java.net.URL;
-import java.net.URLConnection;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 操作文件工具类
- *
  * @author Kevin
  * @date 2020/11/24 14:11
  */
@@ -91,6 +87,35 @@ public class FileUtil {
         return false;
     }
 
+    public static void moveFiles(String sourceFolderPath, String targetFolderPath) {
+        File sourceFolder = new File(sourceFolderPath);
+        // 获取文件夹内的所有文件
+        File[] files = sourceFolder.listFiles();
+        // 遍历文件夹内的所有文件
+        for (File file : files) {
+            if (file.isDirectory()) {
+                // 如果是文件夹，则递归调用moveFiles方法继续遍历文件夹内的文件
+                moveFiles(file.getAbsolutePath(), targetFolderPath);
+            } else {
+                // 如果是文件，则调用moveFile方法移动文件到目标位置
+                moveFile(file, targetFolderPath);
+            }
+        }
+    }
+
+    public static void moveFile(File file, String targetFolderPath) {
+        try {
+            // 目标文件的路径
+            String targetFilePath = targetFolderPath + File.separator + file.getName();
+            File targetFile = new File(targetFilePath);
+            // 使用Java的文件操作方法将文件移动到目标位置
+            Files.move(file.toPath(), targetFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+            log.info("Moved file: " + file.getAbsolutePath() + " to " + targetFile.getAbsolutePath());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     /**
      * 获取某个目录下所有直接下级文件,不包括目录下的子目录的下的文件
      *
@@ -101,6 +126,7 @@ public class FileUtil {
         List<String> fileList = new ArrayList<>();
         File file = new File(filePath);
         File[] tempList = file.listFiles();
+        assert tempList != null;
         for (File fil : tempList) {
             if (fil.isFile()) {
                 // 文件名，不包含路径
@@ -111,71 +137,75 @@ public class FileUtil {
     }
 
     /**
-     * @param httpPath 文件网络地址
-     * @param fileName 带后缀的文件名   aaa.docx
-     * @param savePath 不带文件名的路径
+     * 获取当前目录下全部文件
      */
-    @SneakyThrows
-    public static String getInputStream(String httpPath, String fileName, String savePath) {
-        // 替换成你需要保存图片的本地目录
-        savePath = savePath + fileName;
-        log.info("转UTF-8格式前请求：" + httpPath);
-        httpPath = hanldChinese(httpPath);
-        log.info("转UTF-8格式后请求：" + httpPath);
-        try {
-            // 打开连接
-            URL url = new URL(httpPath);
-            URLConnection connection = url.openConnection();
-            // 设置请求超时为5秒
-            connection.setConnectTimeout(5 * 1000);
-            // 读取数据流并保存到本地
-            InputStream input = connection.getInputStream();
-            byte[] data = new byte[1024];
-            int len;
-            FileOutputStream output = new FileOutputStream(savePath);
-            while ((len = input.read(data)) != -1) {
-                output.write(data, 0, len);
-            }
-            output.close();
-            input.close();
-            log.info("文件保存本地成功：" + savePath);
-
-            //*本地文件路径给出  左斜线*/
-            File file = new File(savePath);
-            return file.getPath();
-        } catch (IOException e) {
-            e.printStackTrace();
-            log.info("文件保存失败：" + e.getMessage());
-            return null;
+    public static List<File> getAllFiles(String path) {
+        List<File> fileList = Lists.newArrayList();
+        // 检查省定路径是否为目录
+        File directory = new File(path);
+        if (!directory.isDirectory()) {
+            return fileList;
         }
+        // 获歌目录下的所有文件和子目录
+        File[] files = directory.listFiles();
+        // 遍历所有文件和子目录
+        assert files != null;
+        for (File file : files) {
+            // 如果是文件则派加资文件列表中
+            if (file.isFile()) {
+                fileList.add(file);
+            }
+            //如果是昌最则诺归调用这方法
+            if (file.isDirectory()) {
+                fileList.addAll(getAllFiles(file.getAbsolutePath()));
+            }
+        }
+        return fileList;
     }
 
     /**
-     * 对中文字符进行UTF-8编码
+     * 复制文件夹
      *
-     * @param source 要转义的字符串
+     * @param srcFolderPath
+     * @param destFolderPath
      */
-    public static String hanldChinese(String source) {
-        char[] arr = source.toCharArray();
-        StringBuilder sb = new StringBuilder();
-        for (char temp : arr) {
-            if (isChinese(temp)) {
-                sb.append(URLEncoder.encode(String.valueOf(temp), StandardCharsets.UTF_8));
-                continue;
-            }
-            sb.append(temp);
+    public static void copyFolder(String srcFolderPath, String destFolderPath) {
+        // 封装数据源目录
+        File srcFolder = new File(srcFolderPath);
+        // 封装目的地目录
+        File destFolder = new File(destFolderPath);
+        // 如果目的地文件夹不存在就创建
+        if (!destFolder.exists()) {
+            destFolder.mkdir();
         }
-        return sb.toString();
+        // 获取数据源目录下的所有文件的File数组
+        File[] fileArray = srcFolder.listFiles();
+
+        // 遍历File数组得到每一个File对象
+        for (File file : fileArray) {
+            // 获取文件名
+            String name = file.getName();
+            // 获取文件路径
+            File newFile = new File(destFolder, name);
+            try {
+                copyFile(file, newFile);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
     }
 
-    public static boolean isChinese(char c) {
-        Character.UnicodeBlock ub = Character.UnicodeBlock.of(c);
-        return ub == Character.UnicodeBlock.CJK_UNIFIED_IDEOGRAPHS
-                || ub == Character.UnicodeBlock.CJK_COMPATIBILITY_IDEOGRAPHS
-                || ub == Character.UnicodeBlock.CJK_UNIFIED_IDEOGRAPHS_EXTENSION_A
-                || ub == Character.UnicodeBlock.GENERAL_PUNCTUATION
-                || ub == Character.UnicodeBlock.CJK_SYMBOLS_AND_PUNCTUATION
-                || ub == Character.UnicodeBlock.HALFWIDTH_AND_FULLWIDTH_FORMS;
+    private static void copyFile(File file, File newFile) throws IOException {
+        BufferedInputStream bis = new BufferedInputStream(new FileInputStream(file));
+        BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(newFile));
+        byte[] bys = new byte[1024];
+        int len = 0;
+        while ((len = bis.read(bys)) != -1) {
+            bos.write(bys, 0, len);
+        }
+        bos.close();
+        bis.close();
     }
 
 }

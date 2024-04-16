@@ -32,7 +32,7 @@ public class FileUtil {
         try {
             // 创建BufferedInputStream 对象
             inStream = new BufferedInputStream(new FileInputStream(file));
-            StringBuffer stringBuffer = new StringBuffer();
+            StringBuilder stringBuffer = new StringBuilder();
             while ((bytesRead = inStream.read(buffer)) != -1) {
                 // 将读取的字节转为字符串对象
                 String chunk = new String(buffer, 0, bytesRead);

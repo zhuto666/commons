@@ -4,7 +4,10 @@ import com.zhongqin.commons.util.LocalDateTimeUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.mapstruct.Named;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 /**
  * @author Kevin
@@ -83,6 +86,31 @@ public class DefaultTypeConversionWorker {
     private LocalDateTime formatterLocalDateTime(String str, String format) {
         str = trim(str);
         return LocalDateTimeUtil.getLocalDateTimeByString(str, format);
+    }
+
+    @Named("strToBigDecimal")
+    public BigDecimal strToBigDecimal(String str) {
+        return StringUtils.isBlank(str) ? BigDecimal.ZERO : new BigDecimal(str.trim());
+    }
+
+    @Named("bigDecimalSetScale")
+    public BigDecimal bigDecimalSub(BigDecimal str) {
+        return str.setScale(2, RoundingMode.UP);
+    }
+
+    @Named("strToInteger")
+    public Integer strToInteger(String str) {
+        return StringUtils.isBlank(str) ? 0 : Integer.parseInt(str);
+    }
+
+    @Named("strToLocalTime")
+    public LocalTime defaultStrToLocalTime(String str) {
+        return StringUtils.isBlank(str) ? null : LocalTime.parse(str.substring(11));
+    }
+
+    @Named("strToLocalDateTimeBySpecialString")
+    public LocalDateTime strToLocalDateTime(String str) {
+        return StringUtils.isBlank(str) ? null : LocalDateTimeUtil.getLocalDateTimeBySpecialString(str, "M/d/yyyy HH:mm:ss");
     }
 
 }

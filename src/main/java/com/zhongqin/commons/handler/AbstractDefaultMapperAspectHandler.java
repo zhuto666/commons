@@ -56,7 +56,7 @@ public abstract class AbstractDefaultMapperAspectHandler {
 
     private Object getObject(ProceedingJoinPoint pjp, String update) throws Throwable {
         Object[] objects = pjp.getArgs();
-        if (objects != null && objects.length > 0) {
+        if (objects != null) {
             for (Object arg : objects) {
                 if (arg instanceof ArrayList) {
                     List<Object> list = (ArrayList<Object>) arg;
@@ -68,8 +68,7 @@ public abstract class AbstractDefaultMapperAspectHandler {
                 }
             }
         }
-        Object object = pjp.proceed();
-        return object;
+        return pjp.proceed();
     }
 
     private void setObjectAttribute(Object arg, String type) throws Exception {
@@ -83,7 +82,7 @@ public abstract class AbstractDefaultMapperAspectHandler {
             setProperty(arg, userInfoId, isCreatedBy, isGmtCreated, CREATE_BY, GMT_CREATED, LocalDateTime.now());
             setProperty(arg, "0", isModifiedBy, isGmtModified, MODIFIED_BY, GMT_MODIFIED, LocalDateTimeUtil.defaultDate());
         } else {
-            setProperty(arg, userInfoId, isModifiedBy, isGmtModified, MODIFIED_BY, GMT_MODIFIED, LocalDateTime.now());
+            setProperty(arg, userInfoId, null, null, MODIFIED_BY, GMT_MODIFIED, LocalDateTime.now());
         }
     }
 

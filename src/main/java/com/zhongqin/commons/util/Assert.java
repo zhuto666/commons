@@ -14,6 +14,33 @@ import java.util.Objects;
 public class Assert {
 
     /**
+     * 断言这个Boolean是 true 还是 false
+     * <p>为false 则抛出异常</p>
+     *
+     * @param bool
+     * @param msg
+     */
+    public static void isBoolean(Boolean bool, String msg) {
+        if (!bool) {
+            throw new CustomException(msg);
+        }
+    }
+
+    /**
+     * 断言这个两个字符串是否相等
+     * <p>不相等 则抛出异常</p>
+     *
+     * @param str
+     * @param str2
+     * @param msg
+     */
+    public static void isEquals(String str, String str2,String msg) {
+        if (!str.equals(str2)) {
+            throw new CustomException(msg);
+        }
+    }
+
+    /**
      * 断言这个字符串不是空白
      * <p>为空白字符串 则抛出异常</p>
      *

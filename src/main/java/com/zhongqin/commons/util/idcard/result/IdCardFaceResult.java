@@ -44,8 +44,8 @@ public class IdCardFaceResult {
     /**
      * 性别
      */
-    @JsonProperty(value = "set")
-    private String set;
+    @JsonProperty(value = "sex")
+    private String sex;
 
     /**
      * 出生日期

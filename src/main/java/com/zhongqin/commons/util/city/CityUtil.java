@@ -24,7 +24,7 @@ public class CityUtil {
         try {
             JsonNode jsonNode = objectMapper.readTree(str);
             if ("200".equals(jsonNode.get("code").asText())) {
-                return jsonNode.get("data").get("location").get("city").asText();
+                return jsonNode.get("data").get("location").get("province").asText() + " " + jsonNode.get("data").get("location").get("city").asText();
             }
         } catch (Exception e) {
             return null;

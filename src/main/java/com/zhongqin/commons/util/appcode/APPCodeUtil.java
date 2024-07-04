@@ -1,23 +1,16 @@
 package com.zhongqin.commons.util.appcode;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
 import com.zhongqin.commons.exception.CustomException;
 import com.zhongqin.commons.util.AlibabaHttpUtils;
 import com.zhongqin.commons.util.JsonTools;
+import com.zhongqin.commons.util.idcard.IdCardUtil;
 import org.apache.http.HttpResponse;
 import org.apache.http.util.EntityUtils;
-import org.springframework.data.repository.init.ResourceReader;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
-
-import static org.apache.commons.codec.binary.Base64.encodeBase64;
 
 /**
  * @author Kevin
@@ -36,34 +29,24 @@ public class APPCodeUtil {
         String host = "https://driving.market.alicloudapi.com";
         String path = "/rest/160601/ocr/ocr_vehicle.json";
         String appcode = "c89ae79bb9ed4d7a87e774b643e48a97";
-        JSONObject configObj = new JSONObject();
-        configObj.put("side", side);
-        String configStr = configObj.toString();
         String method = "POST";
         Map<String, String> headers = new HashMap<String, String>();
         headers.put("Authorization", "APPCODE " + appcode);
+        headers.put("Content-Type", "application/json; charset=UTF-8");
         Map<String, String> query = new HashMap<>();
         // 对图像进行base64编码
-        String imgBase64 = "";
-        try {
-            File file = new File(imgPath);
-            byte[] content = new byte[(int) file.length()];
-            FileInputStream finputstream = new FileInputStream(file);
-            finputstream.read(content);
-            finputstream.close();
-            imgBase64 = new String(encodeBase64(content));
-        } catch (IOException e) {
-            throw new CustomException(e.getMessage());
-        }
+        String imgBase64 = IdCardUtil.imgBase64(imgPath);
+        // configure配置
+        JSONObject configObj = new JSONObject();
+        // face 正面
+        // back 反面
+        configObj.put("side", side);
+        String configStr = configObj.toString();
         // 拼装请求body的json字符串
         JSONObject requestObj = new JSONObject();
-        try {
-            requestObj.put("image", imgBase64);
-            if (configStr.length() > 0) {
-                requestObj.put("configure", configStr);
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
+        requestObj.put("image", imgBase64);
+        if (configObj.size() > 0) {
+            requestObj.put("configure", configStr);
         }
         String bodys = requestObj.toString();
         try {

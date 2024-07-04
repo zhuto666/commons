@@ -66,7 +66,7 @@ public class AppCodeBackResult {
     private String unladenMass;
 
     /**
-     * 牌号码
+     * 车牌号码
      */
     @JsonProperty(value = "plate_num")
     private String plateNum;

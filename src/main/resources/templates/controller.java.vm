@@ -1,0 +1,76 @@
+package ${package.Controller};
+
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import org.springframework.web.bind.annotation.*;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.zhongqin.commons.result.Result;
+import ${package.Service}.${table.serviceName};
+import ${package.Entity}.${entity};
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
+
+/**
+ * <p>
+ * $!{table.comment} 前端控制器
+ * </p>
+ *
+ * @author ${author}
+ * @date ${date}
+ */
+@RestController
+@RequestMapping("/${schemaName}${table.name}")
+@Api(tags = "系统设置-通用接口")
+public class ${table.controllerName} {
+
+    private final ${table.serviceName} i${entity}Service;
+
+    public ${table.controllerName}(${table.serviceName} i${entity}Service) {
+        this.i${entity}Service = i${entity}Service;
+    }
+
+    @PostMapping("/list")
+    @ApiOperation(value = "分页查询")
+    public Result<IPage<${entity}>> list(@RequestParam Integer pageNum, @RequestParam Integer pageSize) {
+        QueryWrapper<${entity}> queryWrapper = new QueryWrapper<>();
+        return Result.success(i${entity}Service.page(new Page<>(pageNum, pageSize), queryWrapper));
+    }
+
+    @GetMapping("/get_by_id/{id}")
+    @ApiOperation(value = "根据Id查询")
+    public Result<${entity}> findOne(@PathVariable String id) {
+        return Result.success(i${entity}Service.getById(id));
+    }
+
+    @PostMapping("/insert")
+    @ApiOperation(value = "新增")
+    public Result<Void> insert(@RequestBody ${entity} i${entity}) {
+        i${entity}Service.save(i${entity});
+        return Result.success();
+    }
+
+    @PutMapping("/update")
+    @ApiOperation(value = "修改")
+    public Result<Void> update(@RequestBody ${entity} i${entity}) {
+        i${entity}Service.updateById(i${entity});
+        return Result.success();
+    }
+
+    @DeleteMapping("/deleted/{id}")
+    @ApiOperation(value = "根据Id删除")
+    public Result<Void> update(@PathVariable String id) {
+        i${entity}Service.removeById(id);
+        return Result.success();
+    }
+
+    @PostMapping("/delete/batch")
+    @ApiOperation(value = "批量删除")
+    public Result<Void> deleteBatch(@RequestBody List<String> ids) {
+        i${entity}Service.removeByIds(ids);
+        return Result.success();
+    }
+
+}

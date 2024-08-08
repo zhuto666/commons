@@ -33,11 +33,11 @@ public class SendMobileSmsUtil {
     }
 
     @SneakyThrows
-    public static String sendMessage(String phoneNumbers) {
+    public static String sendMessage(String phoneNumbers, String signName) {
         Client client = SendMobileSmsUtil.createClient();
         SendSmsRequest sendSmsRequest = new SendSmsRequest()
                 .setPhoneNumbers(phoneNumbers)
-                .setSignName("晟富")
+                .setSignName(signName)
                 .setTemplateCode("SMS_465364845");
         try {
             // 复制代码运行请自行打印 API 的返回值

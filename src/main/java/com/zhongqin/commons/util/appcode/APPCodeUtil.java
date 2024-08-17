@@ -28,7 +28,7 @@ public class APPCodeUtil {
     public static String getAppCode(String side, String imgPath) {
         String host = "https://driving.market.alicloudapi.com";
         String path = "/rest/160601/ocr/ocr_vehicle.json";
-        String appcode = "c89ae79bb9ed4d7a87e774b643e48a97";
+        String appcode = "e9085263763040c7a1a8c2618ef912ef";
         String method = "POST";
         Map<String, String> headers = new HashMap<String, String>();
         headers.put("Authorization", "APPCODE " + appcode);

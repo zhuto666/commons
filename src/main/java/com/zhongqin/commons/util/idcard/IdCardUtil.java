@@ -52,7 +52,7 @@ public class IdCardUtil {
     public static String getOcrIdCard(String side, String imgPath) {
         String host = "https://cardnumber.market.alicloudapi.com";
         String path = "/rest/160601/ocr/ocr_idcard.json";
-        String appcode = "c89ae79bb9ed4d7a87e774b643e48a97";
+        String appcode = "e9085263763040c7a1a8c2618ef912ef";
         String method = "POST";
         Map<String, String> headers = new HashMap<>();
         headers.put("Authorization", "APPCODE " + appcode);

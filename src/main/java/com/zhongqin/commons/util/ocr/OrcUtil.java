@@ -1,5 +1,6 @@
 package com.zhongqin.commons.util.ocr;
 
+import com.zhongqin.commons.exception.CustomException;
 import com.zhongqin.commons.util.JsonTools;
 import com.zhongqin.commons.util.appcode.APPCodeUtil;
 import com.zhongqin.commons.util.idcard.IdCardUtil;
@@ -12,15 +13,19 @@ import com.zhongqin.commons.util.idcard.IdCardUtil;
 public class OrcUtil {
 
     public static <T> T ocr(String url, String configStr, String certificates, Class<T> clazz) {
-        switch (certificates) {
-            case "行驶证":
-                String appCode = APPCodeUtil.getAppCode(configStr, url);
-                System.out.println("行驶证" + appCode);
-                return JsonTools.jsonToObject(appCode, clazz);
-            case "身份证":
-                String idCard = IdCardUtil.getOcrIdCard(configStr, url);
-                System.out.println("身份证" + idCard);
-                return JsonTools.jsonToObject(idCard, clazz);
+        try {
+            switch (certificates) {
+                case "行驶证":
+                    String appCode = APPCodeUtil.getAppCode(configStr, url);
+                    System.out.println("行驶证" + appCode);
+                    return JsonTools.jsonToObject(appCode, clazz);
+                case "身份证":
+                    String idCard = IdCardUtil.getOcrIdCard(configStr, url);
+                    System.out.println("身份证" + idCard);
+                    return JsonTools.jsonToObject(idCard, clazz);
+            }
+        } catch (CustomException ex) {
+            throw new CustomException(ex.getMsg());
         }
         return null;
     }

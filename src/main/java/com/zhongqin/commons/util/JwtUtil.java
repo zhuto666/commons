@@ -107,5 +107,4 @@ public class JwtUtil {
         return Algorithm.HMAC256(JWT_SALT);
     }
 
-
 }

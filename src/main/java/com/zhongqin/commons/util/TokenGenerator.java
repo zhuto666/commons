@@ -2,6 +2,7 @@ package com.zhongqin.commons.util;
 
 
 import com.zhongqin.commons.exception.CustomException;
+import org.apache.commons.codec.digest.DigestUtils;
 
 import java.security.MessageDigest;
 import java.util.UUID;
@@ -14,7 +15,7 @@ import java.util.UUID;
  */
 public class TokenGenerator {
 
-    private static final char[] HEX_CODE = "0123456789abcdef" .toCharArray();
+    private static final char[] HEX_CODE = "0123456789abcdef".toCharArray();
 
     public static String generateValue() {
         return generateValue(UUID.randomUUID().toString());
@@ -25,17 +26,14 @@ public class TokenGenerator {
             return null;
         }
         StringBuilder r = new StringBuilder(data.length * 2);
-        byte[] arrayOfByte = data;
-        int j = data.length;
-        for (int i = 0; i < j; i++) {
-            byte b = arrayOfByte[i];
+        for (byte b : data) {
             r.append(HEX_CODE[(b >> 4 & 0xF)]);
             r.append(HEX_CODE[(b & 0xF)]);
         }
         return r.toString();
     }
 
-    private static String generateValue(String param) {
+    public static String generateValue(String param) {
         try {
             MessageDigest algorithm;
             algorithm = MessageDigest.getInstance("MD5");
@@ -47,4 +45,15 @@ public class TokenGenerator {
             throw new CustomException(ExceptionUtil.getStackTrace(ex));
         }
     }
+
+    /**
+     * MD5后转大写
+     *
+     * @param msg
+     * @return
+     */
+    public static String sign(String msg) {
+        return DigestUtils.md5Hex(msg).toUpperCase();
+    }
+
 }

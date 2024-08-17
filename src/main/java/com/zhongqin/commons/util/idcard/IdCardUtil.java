@@ -5,7 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.zhongqin.commons.exception.CustomException;
 import com.zhongqin.commons.util.AlibabaHttpUtils;
 import com.zhongqin.commons.util.JsonTools;
-import lombok.extern.java.Log;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.http.HttpResponse;
 import org.apache.http.util.EntityUtils;
@@ -22,6 +22,7 @@ import java.util.Map;
  * @version 1.0
  * @date 2024/7/1 11:52 星期一
  */
+@Slf4j
 public class IdCardUtil {
 
     public static String imgBase64(String path) {
@@ -79,9 +80,9 @@ public class IdCardUtil {
             HttpResponse response = AlibabaHttpUtils.doPost(host, path, method, headers, query, bodys);
             int stat = response.getStatusLine().getStatusCode();
             if (stat != 200) {
-                System.out.println("Http code: " + stat);
-                System.out.println("http header error msg: " + response.getFirstHeader("X-Ca-Error-Message"));
-                System.out.println("Http body error msg:" + EntityUtils.toString(response.getEntity()));
+                log.error("Http code: " + stat);
+                log.error("http header error msg: " + response.getFirstHeader("X-Ca-Error-Message"));
+                log.error("Http body error msg:" + EntityUtils.toString(response.getEntity()));
                 throw new CustomException("身份证" + ("face".equals(side) ? "正面" : "反面") + "识别失败");
             }
             String res = EntityUtils.toString(response.getEntity());

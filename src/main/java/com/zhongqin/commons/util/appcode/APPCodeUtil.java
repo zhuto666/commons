@@ -56,15 +56,14 @@ public class APPCodeUtil {
                 System.out.println("Http code: " + stat);
                 System.out.println("http header error msg: " + response.getFirstHeader("X-Ca-Error-Message"));
                 System.out.println("Http body error msg:" + EntityUtils.toString(response.getEntity()));
-                throw new CustomException("行驶证" + side + "识别失败");
+                throw new CustomException("行驶证" + ("face".equals(side) ? "正面" : "反面") + "识别失败");
             }
             String res = EntityUtils.toString(response.getEntity());
             JSONObject resObj = JSON.parseObject(res);
             return JsonTools.objectToJson(resObj);
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new CustomException(e.getMessage());
         }
-        return null;
     }
 
 }

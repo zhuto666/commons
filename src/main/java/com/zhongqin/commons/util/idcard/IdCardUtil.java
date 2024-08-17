@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.zhongqin.commons.exception.CustomException;
 import com.zhongqin.commons.util.AlibabaHttpUtils;
 import com.zhongqin.commons.util.JsonTools;
+import lombok.extern.java.Log;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.http.HttpResponse;
 import org.apache.http.util.EntityUtils;
@@ -81,15 +82,14 @@ public class IdCardUtil {
                 System.out.println("Http code: " + stat);
                 System.out.println("http header error msg: " + response.getFirstHeader("X-Ca-Error-Message"));
                 System.out.println("Http body error msg:" + EntityUtils.toString(response.getEntity()));
-                throw new CustomException("身份证" + side + "识别失败");
+                throw new CustomException("身份证" + ("face".equals(side) ? "正面" : "反面") + "识别失败");
             }
             String res = EntityUtils.toString(response.getEntity());
             JSONObject resObj = JSON.parseObject(res);
             return JsonTools.objectToJson(resObj);
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new CustomException(e.getMessage());
         }
-        return null;
     }
 
 }

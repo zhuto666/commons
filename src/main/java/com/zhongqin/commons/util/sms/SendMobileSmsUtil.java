@@ -7,8 +7,9 @@ import com.aliyun.tea.TeaException;
 import com.aliyun.teautil.models.RuntimeOptions;
 import com.zhongqin.commons.exception.CustomException;
 import com.zhongqin.commons.util.JsonTools;
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+
+import java.util.Random;
 
 /**
  * @author Kevin
@@ -32,14 +33,21 @@ public class SendMobileSmsUtil {
         return new Client(config);
     }
 
-    @SneakyThrows
+    /**
+     * 发送短信提醒
+     *
+     * @param phoneNumbers 手机号
+     * @param signName     签名
+     * @return str
+     */
     public static String sendMessage(String phoneNumbers, String signName) {
-        Client client = SendMobileSmsUtil.createClient();
-        SendSmsRequest sendSmsRequest = new SendSmsRequest()
-                .setPhoneNumbers(phoneNumbers)
-                .setSignName(signName)
-                .setTemplateCode("SMS_465364845");
         try {
+
+            Client client = SendMobileSmsUtil.createClient();
+            SendSmsRequest sendSmsRequest = new SendSmsRequest()
+                    .setPhoneNumbers(phoneNumbers)
+                    .setSignName(signName)
+                    .setTemplateCode("SMS_465364845");
             // 复制代码运行请自行打印 API 的返回值
             SendSmsResponse sendSmsResponse = client.sendSmsWithOptions(sendSmsRequest, new RuntimeOptions());
             return JsonTools.objectToJson(sendSmsResponse.body);
@@ -53,6 +61,46 @@ public class SendMobileSmsUtil {
             log.error("诊断地址{}", error.getData().get("Recommend"));
             throw new CustomException(error.message);
         }
+    }
+
+    /**
+     * 发送短信验证码
+     *
+     * @param phoneNumbers 手机号
+     * @param signName     签名
+     * @param code         验证码
+     * @return str
+     */
+    public static String sendMessage(String phoneNumbers, String signName, String code) {
+        try {
+            Client client = SendMobileSmsUtil.createClient();
+            SendSmsRequest sendSmsRequest = new SendSmsRequest()
+                    .setPhoneNumbers(phoneNumbers)
+                    .setSignName(signName)
+                    .setTemplateCode("SMS_471800250")
+                    .setTemplateParam("{\"code\":\"" + code + "\"}");
+            // 复制代码运行请自行打印 API 的返回值
+            SendSmsResponse sendSmsResponse = client.sendSmsWithOptions(sendSmsRequest, new RuntimeOptions());
+            return JsonTools.objectToJson(sendSmsResponse.body);
+        } catch (TeaException error) {
+            log.error("发送短信出现TeaException异常");
+            log.error("诊断地址{}", error.getData().get("Recommend"));
+            throw new CustomException(error.message);
+        } catch (Exception exception) {
+            TeaException error = new TeaException(exception.getMessage(), exception);
+            log.error("发送短信出现TeaException异常");
+            log.error("诊断地址{}", error.getData().get("Recommend"));
+            throw new CustomException(error.message);
+        }
+    }
+
+    public static String generateCode() {
+        Random random = new Random();
+        StringBuilder code = new StringBuilder();
+        for (int i = 1; i <= 4; i++) {
+            code.append(String.valueOf(System.currentTimeMillis()).charAt(random.nextInt(13)));
+        }
+        return String.valueOf(code);
     }
 
 

@@ -42,7 +42,6 @@ public class SendMobileSmsUtil {
      */
     public static String sendMessage(String phoneNumbers, String signName) {
         try {
-
             Client client = SendMobileSmsUtil.createClient();
             SendSmsRequest sendSmsRequest = new SendSmsRequest()
                     .setPhoneNumbers(phoneNumbers)
@@ -94,6 +93,11 @@ public class SendMobileSmsUtil {
         }
     }
 
+    /**
+     * 生成短信验证码
+     *
+     * @return 验证码
+     */
     public static String generateCode() {
         Random random = new Random();
         StringBuilder code = new StringBuilder();

@@ -18,7 +18,7 @@ public class CityUtil {
      * @param ip ip
      * @return 城市
      */
-    public static String getCity(String ip) {
+    public static String getCityByIp(String ip) {
         String str = HttpsUtil.doGet("https://api.ipdatacloud.com/v2/query?ip=" + ip + "&key=32b6aa56374f11ef94c900163e167ffb");
         ObjectMapper objectMapper = new ObjectMapper();
         try {
@@ -30,6 +30,27 @@ public class CityUtil {
             return null;
         }
         return null;
+    }
+
+    /**
+     * 获取地域城市
+     *
+     * @param city 地域
+     * @return 城市
+     */
+    public static String getCity(String city) {
+        String replace = city.replace(" ", ",");
+        String[] split = replace.split(",");
+        if (split[0].contains("市")) {
+            return split[0].replaceAll("市", "");
+        }
+        for (String str : split) {
+            if (str.contains("市")) {
+                replace = str;
+                break;
+            }
+        }
+        return replace.replaceAll("市", "");
     }
 
 }

@@ -14,7 +14,6 @@ import static java.util.stream.Collectors.joining;
 
 /**
  * String 工具类
- *
  */
 public final class StringUtils {
 
@@ -577,12 +576,21 @@ public final class StringUtils {
      */
     public static String sqlInjectionReplaceBlank(String str) {
         if (SqlInjectionUtils.check(str)) {
-            /**
-             * 存在 SQL 注入，去除空白内容
-             */
+            // 存在 SQL 注入，去除空白内容
             Matcher matcher = REPLACE_BLANK.matcher(str);
             return matcher.replaceAll("");
         }
         return str;
     }
+
+    /**
+     * 判断是不是字符串
+     *
+     * @param str str
+     * @return tur and false
+     */
+    public static boolean isTimestamp(String str) {
+        return str.length() == 10 || str.length() == 13;
+    }
+
 }

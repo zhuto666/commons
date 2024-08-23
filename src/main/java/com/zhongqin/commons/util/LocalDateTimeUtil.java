@@ -168,7 +168,7 @@ public class LocalDateTimeUtil {
             return period.getYears();
         }
         if (field == ChronoUnit.MONTHS) {
-            return period.getYears() * 12 + period.getMonths();
+            return period.getYears() * 12L + period.getMonths();
         }
         return field.between(startTime, endTime);
     }
@@ -279,4 +279,45 @@ public class LocalDateTimeUtil {
         String yearEndDateTime = year + END_DAY + END_TIME;
         return getLocalDateTimeByString(yearEndDateTime);
     }
+
+    /**
+     * 日期转换 0,1,2,3,4,5,6 转 星期天,星期一,星期二,星期三,星期四,星期五,星期六
+     *
+     * @param str str
+     * @return str
+     */
+    public static String dateConversion(String str) {
+        String[] split = str.split(",");
+        StringBuilder receiveDate = new StringBuilder();
+        for (int i = 0; i < split.length; i++) {
+            switch (split[i]) {
+                case "0":
+                    receiveDate.append("星期天");
+                    break;
+                case "1":
+                    receiveDate.append("星期一");
+                    break;
+                case "2":
+                    receiveDate.append("星期二");
+                    break;
+                case "3":
+                    receiveDate.append("星期三");
+                    break;
+                case "4":
+                    receiveDate.append("星期四");
+                    break;
+                case "5":
+                    receiveDate.append("星期五");
+                    break;
+                case "6":
+                    receiveDate.append("星期六");
+                    break;
+            }
+            if (i < split.length - 1) {
+                receiveDate.append(",");
+            }
+        }
+        return String.valueOf(receiveDate);
+    }
+
 }

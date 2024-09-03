@@ -162,14 +162,19 @@
         </dependency>
     </dependencies>
 
-    <!-- 发布 -->
-    <!--    <distributionManagement>-->
-    <!--        <repository>-->
-    <!--            <id>packaging-releases</id>-->
-    <!--            <name>Packaging Release Repository</name>-->
-    <!--            <url>http://192.168.31.32:8081/repository/zhongqin_hosted/</url>-->
-    <!--        </repository>-->
-    <!--    </distributionManagement>-->
+    <!-- 发布jar包时需要有的maven私服配置 -->
+    <distributionManagement>
+        <repository>
+            <id>maven-releases</id>
+            <name>maven-releases</name>
+            <url>http://maven-nexus.cjl2616.cn/repository/maven-releases/</url>
+        </repository>
+        <snapshotRepository>
+            <id>maven-releases</id>
+            <name>maven-snapshots</name>
+            <url>http://maven-nexus.cjl2616.cn/repository/maven-snapshots/</url>
+        </snapshotRepository>
+    </distributionManagement>
 
     <build>
         <plugins>

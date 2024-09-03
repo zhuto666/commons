@@ -55,7 +55,12 @@ public class CityUtil {
         return replace.replaceAll("市", "");
     }
 
-
+    /**
+     * 车牌转省
+     *
+     * @param city 车牌
+     * @return str
+     */
     public static String getProvincialLevel(String city) {
         if (city.length() > 1) {
             city = String.valueOf(city.charAt(0));

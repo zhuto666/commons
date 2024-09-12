@@ -163,23 +163,13 @@
     </dependencies>
 
     <!-- 发布jar包时需要有的maven私服配置 -->
+    <!-- 推送 -->
     <distributionManagement>
         <repository>
             <id>maven-releases</id>
             <url>http://maven-nexus.cjl2616.cn/repository/maven-releases/</url>
         </repository>
     </distributionManagement>
-
-    <repositories>
-        <repository>
-            <id>maven-releases</id>
-            <url>http://maven-nexus.cjl2616.cn/repository/maven-releases/</url>
-        </repository>
-        <repository>
-            <id>maven-central</id>
-            <url>http://maven-nexus.cjl2616.cn/repository/maven-central/</url>
-        </repository>
-    </repositories>
 
     <build>
         <plugins>

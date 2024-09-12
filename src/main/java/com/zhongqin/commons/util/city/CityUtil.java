@@ -3,8 +3,12 @@ package com.zhongqin.commons.util.city;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zhongqin.commons.util.HttpsUtil;
+import com.zhongqin.commons.util.JsonTools;
 
+import javax.crypto.SecretKey;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * @author Kevin
@@ -66,41 +70,90 @@ public class CityUtil {
             city = String.valueOf(city.charAt(0));
         }
         HashMap<String, String> map = new HashMap<>();
-        map.put("皖", "安徽");
-        map.put("澳", "澳门");
-        map.put("港", "香港");
-        map.put("台", "台湾");
-        map.put("京", "北京");
-        map.put("沪", "上海");
-        map.put("津", "天津");
-        map.put("渝", "重庆");
+        map.put("皖", "安徽省");
+        map.put("澳", "澳门省");
+        map.put("港", "香港省");
+        map.put("台", "台湾省");
+        map.put("京", "北京省");
+        map.put("沪", "上海省");
+        map.put("津", "天津省");
+        map.put("渝", "重庆省");
         map.put("冀", "河北省");
-        map.put("豫", "河南");
-        map.put("云", "云南");
-        map.put("辽", "辽宁");
-        map.put("黑", "黑龙江");
-        map.put("湘", "湖南");
-        map.put("鲁", "山东");
+        map.put("豫", "河南省");
+        map.put("云", "云南省");
+        map.put("辽", "辽宁省");
+        map.put("黑", "黑龙江省");
+        map.put("湘", "湖南省");
+        map.put("鲁", "山东省");
         map.put("新", "新疆维吾尔自治区");
-        map.put("苏", "江苏");
-        map.put("浙", "浙江");
-        map.put("赣", "江西");
-        map.put("鄂", "湖北");
+        map.put("苏", "江苏省");
+        map.put("浙", "浙江省");
+        map.put("赣", "江西省");
+        map.put("鄂", "湖北省");
         map.put("桂", "广西壮族自治区");
         map.put("甘", "甘肃省");
-        map.put("晋", "山西");
+        map.put("晋", "山西省");
         map.put("蒙", "内蒙古自治区");
-        map.put("陕", "陕西");
-        map.put("吉", "吉林");
-        map.put("闽", "福建");
-        map.put("贵", "贵州");
-        map.put("粤", "广东");
-        map.put("川", "四川");
-        map.put("青", "青海");
+        map.put("陕", "陕西省");
+        map.put("吉", "吉林省");
+        map.put("闽", "福建省");
+        map.put("贵", "贵州省");
+        map.put("粤", "广东省");
+        map.put("川", "四川省");
+        map.put("青", "青海省");
         map.put("藏", "西藏自治区");
-        map.put("琼", "海南");
+        map.put("琼", "海南省");
         map.put("宁", "宁夏回族自治区");
         return map.get(city);
     }
+
+//    public static void main(String[] args) {
+//        HashMap<String, String> map = new HashMap<>();
+//        map.put("皖", "安徽省");
+//        map.put("澳", "澳门");
+//        map.put("港", "香港");
+//        map.put("台", "台湾");
+//        map.put("京", "北京省");
+//        map.put("沪", "上海省");
+//        map.put("津", "天津省");
+//        map.put("渝", "重庆省");
+//        map.put("冀", "河北省");
+//        map.put("豫", "河南省");
+//        map.put("云", "云南省");
+//        map.put("辽", "辽宁省");
+//        map.put("黑", "黑龙江省");
+//        map.put("湘", "湖南省");
+//        map.put("鲁", "山东省");
+//        map.put("新", "新疆维吾尔自治区");
+//        map.put("苏", "江苏省");
+//        map.put("浙", "浙江省");
+//        map.put("赣", "江西省");
+//        map.put("鄂", "湖北省");
+//        map.put("桂", "广西壮族自治区");
+//        map.put("甘", "甘肃省");
+//        map.put("晋", "山西省");
+//        map.put("蒙", "内蒙古自治区");
+//        map.put("陕", "陕西省");
+//        map.put("吉", "吉林省");
+//        map.put("闽", "福建省");
+//        map.put("贵", "贵州省");
+//        map.put("粤", "广东省");
+//        map.put("川", "四川省");
+//        map.put("青", "青海省");
+//        map.put("藏", "西藏自治区");
+//        map.put("琼", "海南省");
+//        map.put("宁", "宁夏回族自治区");
+//        List<Objects> list = new ArrayList<>();
+//        // keySet获取map集合key的集合  然后在遍历key即可
+//        for (String key : map.keySet()) {
+//            String value = map.get(key);
+//            Objects objects = new Objects();
+//            objects.setText(value);
+//            objects.setValue(value);
+//            list.add(objects);
+//        }
+//        System.out.println(list.size());
+//        System.out.println(JsonTools.objectToJson(list));
+//    }
 
 }

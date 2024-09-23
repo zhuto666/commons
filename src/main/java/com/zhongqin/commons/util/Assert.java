@@ -27,15 +27,29 @@ public class Assert {
     }
 
     /**
-     * 断言这个两个字符串是否相等
+     * 断言这个两个字符串是否相等 区分大小写
      * <p>不相等 则抛出异常</p>
      *
      * @param str
      * @param str2
      * @param msg
      */
-    public static void isEquals(String str, String str2,String msg) {
+    public static void isEquals(String str, String str2, String msg) {
         if (!str.equals(str2)) {
+            throw new CustomException(msg);
+        }
+    }
+
+    /**
+     * 断言这个两个字符串是否相等 并忽略大小写
+     * <p>不相等 则抛出异常</p>
+     *
+     * @param str
+     * @param str2
+     * @param msg
+     */
+    public static void isEqualsIgnoreCase(String str, String str2, String msg) {
+        if (!str.equalsIgnoreCase(str2)) {
             throw new CustomException(msg);
         }
     }

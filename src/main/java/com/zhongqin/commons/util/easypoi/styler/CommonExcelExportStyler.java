@@ -12,8 +12,7 @@ import org.apache.poi.ss.usermodel.*;
  * @author PaulYang
  * @since 2023-02-13
  */
-public class CommonExcelExportStyler extends AbstractExcelExportStyler
-        implements IExcelExportStyler {
+public class CommonExcelExportStyler extends AbstractExcelExportStyler implements IExcelExportStyler {
 
     protected CellStyle numberCellStyle;
     protected CellStyle textCellStyle;

@@ -320,4 +320,54 @@ public class LocalDateTimeUtil {
         return String.valueOf(receiveDate);
     }
 
+    /**
+     * 数字 转 DayOfWeek
+     *
+     * @param number 数字
+     * @return DayOfWeek
+     */
+    public static DayOfWeek convertNumberToDayOfWeek(int number) {
+        if (number < 1 || number > 7) {
+            throw new IllegalArgumentException("Invalid day number: " + number);
+        }
+        return DayOfWeek.of(number);
+    }
+
+    /**
+     * 数字 转 星期
+     *
+     * @param number 数字
+     * @return 星期
+     */
+    public static String convertNumberToStr(int number) {
+        String dayOfWeek;
+        switch (number) {
+            case 1:
+                dayOfWeek = "星期一";
+                break;
+            case 2:
+                dayOfWeek = "星期二";
+                break;
+            case 3:
+                dayOfWeek = "星期三";
+                break;
+            case 4:
+                dayOfWeek = "星期四";
+                break;
+            case 5:
+                dayOfWeek = "星期五";
+                break;
+            case 6:
+                dayOfWeek = "星期六";
+                break;
+            case 7:
+                dayOfWeek = "星期日";
+                break;
+            default:
+                dayOfWeek = "无效的数字";
+                break;
+        }
+        return dayOfWeek;
+    }
+
 }

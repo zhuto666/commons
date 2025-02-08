@@ -28,6 +28,15 @@ public class SnakeGame extends JFrame {
         this.setVisible(true);
     }
 
+    /**
+     * 程序的入口点，创建SnakeGame实例并显示窗口。
+     *
+     * @param args 命令行参数
+     */
+    public static void main(String[] args) {
+        new SnakeGame();
+    }
+
 }
 
 /**

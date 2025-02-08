@@ -202,6 +202,7 @@ public class GoBang extends JFrame {
      * @param args 命令行参数
      */
     public static void main(String[] args) {
+        // 使用 SwingUtilities.invokeLater 方法在事件调度线程中创建并显示窗口
         SwingUtilities.invokeLater(() -> {
             // 创建并显示五子棋窗口
             new GoBang().setVisible(true);

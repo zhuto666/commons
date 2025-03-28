@@ -20,14 +20,14 @@ import java.util.Random;
 @Slf4j
 public class SendMobileSmsUtil {
 
-    public static Client createClient() throws Exception {
+    public static Client createClient(String accessKeyId, String accessKeySecret) throws Exception {
         // 工程代码泄露可能会导致 AccessKey 泄露，并威胁账号下所有资源的安全性。以下代码示例仅供参考。
         // 建议使用更安全的 STS 方式，更多鉴权访问方式请参见：https://help.aliyun.com/document_detail/378657.html。
         com.aliyun.teaopenapi.models.Config config = new com.aliyun.teaopenapi.models.Config()
                 // 必填，请确保代码运行环境设置了环境变量 ALIBABA_CLOUD_ACCESS_KEY_ID。
-                .setAccessKeyId("LTAI5tEtLCHydabsv4pV1KBT")
+                .setAccessKeyId(accessKeyId)
                 // 必填，请确保代码运行环境设置了环境变量 ALIBABA_CLOUD_ACCESS_KEY_SECRET。
-                .setAccessKeySecret("EONv6deF1WCilbjRmZ6wQ90YYaxJEU");
+                .setAccessKeySecret(accessKeySecret);
         // Endpoint 请参考 https://api.aliyun.com/product/Dysmsapi
         config.endpoint = "dysmsapi.aliyuncs.com";
         return new Client(config);
@@ -40,23 +40,18 @@ public class SendMobileSmsUtil {
      * @param signName     签名
      * @return str
      */
-    public static String sendMessage(String phoneNumbers, String signName) {
+    public static String sendMessage(String accessKeyId, String accessKeySecret, String phoneNumbers, String signName, String templateCode) {
         try {
-            Client client = SendMobileSmsUtil.createClient();
-            SendSmsRequest sendSmsRequest = new SendSmsRequest()
-                    .setPhoneNumbers(phoneNumbers)
-                    .setSignName(signName)
-                    .setTemplateCode("SMS_465364845");
+            Client client = SendMobileSmsUtil.createClient(accessKeyId, accessKeySecret);
+            SendSmsRequest sendSmsRequest = new SendSmsRequest().setPhoneNumbers(phoneNumbers).setSignName(signName).setTemplateCode(templateCode);
             // 复制代码运行请自行打印 API 的返回值
             SendSmsResponse sendSmsResponse = client.sendSmsWithOptions(sendSmsRequest, new RuntimeOptions());
             return JsonTools.objectToJson(sendSmsResponse.body);
         } catch (TeaException error) {
-            log.error("发送短信出现TeaException异常");
             log.error("诊断地址{}", error.getData().get("Recommend"));
             throw new CustomException(error.message);
         } catch (Exception exception) {
             TeaException error = new TeaException(exception.getMessage(), exception);
-            log.error("发送短信出现TeaException异常");
             log.error("诊断地址{}", error.getData().get("Recommend"));
             throw new CustomException(error.message);
         }
@@ -70,24 +65,18 @@ public class SendMobileSmsUtil {
      * @param code         验证码
      * @return str
      */
-    public static String sendMessage(String phoneNumbers, String signName, String code) {
+    public static String sendMessage(String accessKeyId, String accessKeySecret, String phoneNumbers, String signName, String code, String templateCode) {
         try {
-            Client client = SendMobileSmsUtil.createClient();
-            SendSmsRequest sendSmsRequest = new SendSmsRequest()
-                    .setPhoneNumbers(phoneNumbers)
-                    .setSignName(signName)
-                    .setTemplateCode("SMS_471800250")
-                    .setTemplateParam("{\"code\":\"" + code + "\"}");
+            Client client = SendMobileSmsUtil.createClient(accessKeyId, accessKeySecret);
+            SendSmsRequest sendSmsRequest = new SendSmsRequest().setPhoneNumbers(phoneNumbers).setSignName(signName).setTemplateCode(templateCode).setTemplateParam("{\"code\":\"" + code + "\"}");
             // 复制代码运行请自行打印 API 的返回值
             SendSmsResponse sendSmsResponse = client.sendSmsWithOptions(sendSmsRequest, new RuntimeOptions());
             return JsonTools.objectToJson(sendSmsResponse.body);
         } catch (TeaException error) {
-            log.error("发送短信出现TeaException异常");
             log.error("诊断地址{}", error.getData().get("Recommend"));
             throw new CustomException(error.message);
         } catch (Exception exception) {
             TeaException error = new TeaException(exception.getMessage(), exception);
-            log.error("发送短信出现TeaException异常");
             log.error("诊断地址{}", error.getData().get("Recommend"));
             throw new CustomException(error.message);
         }
@@ -106,6 +95,5 @@ public class SendMobileSmsUtil {
         }
         return String.valueOf(code);
     }
-
 
 }

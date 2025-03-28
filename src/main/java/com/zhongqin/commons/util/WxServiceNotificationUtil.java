@@ -15,11 +15,10 @@ import java.util.Map;
 @Slf4j
 public class WxServiceNotificationUtil {
 
-    private static final String TOKEN_URL = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=wxc06f403bac193398&secret=71be56f0fcf94ccfc3bab05dd987538f";
-    private static final String SEND_URL = "https://api.weixin.qq.com/cgi-bin/message/subscribe/send?access_token=";
-
-    public static void sendNotifications(String templateId, String openid, String page, Map<String, Object> paramsData) {
-        String str = HttpsUtil.doGet(TOKEN_URL);
+    public static void sendNotifications(String appid, String secret, String templateId, String openid, String page, Map<String, Object> paramsData) {
+        String tokenUrl = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=" + appid + "&secret=" + secret;
+        String sendUrl = "https://api.weixin.qq.com/cgi-bin/message/subscribe/send?access_token=";
+        String str = HttpsUtil.doGet(tokenUrl);
         log.info("access_token结果,{}", str);
         JSONObject jsonObject = JSON.parseObject(str);
         String accessToken = String.valueOf(jsonObject.get("access_token"));
@@ -31,7 +30,7 @@ public class WxServiceNotificationUtil {
         params.put("miniprogram_state", "formal");
         params.put("page", page);
         log.info("params参数,{}", JsonTools.objectToJson(params));
-        String result = HttpsUtil.doPost(SEND_URL + accessToken, JsonTools.objectToJson(params), null);
+        String result = HttpsUtil.doPost(sendUrl + accessToken, JsonTools.objectToJson(params), null);
         log.info("发送结果：{}", result);
     }
 
